@@ -1,0 +1,93 @@
+<script>
+    window.onload = function () {
+        const backlink = document.getElementsByClassName("eventitem-backlink")[0];
+        if (backlink.innerHTML.includes("Back to All Events")) {
+            backlink.innerHTML = "Tilbake til alle aktiviteter"
+        }
+
+        const dateElements = Array.prototype.slice.call(document.getElementsByClassName("event-date"));
+        for (const element of dateElements) {
+            const date = new Date(element.dateTime);
+            const day = date.getDate();
+            const month = GetMothName(date.getMonth())
+            const year = date.getFullYear().toString().substring(2);
+
+            element.innerHTML = `${day}. ${month} '${year}`;
+        }
+
+        const timeElements = Array.prototype.slice.call(document.getElementsByClassName("event-time-12hr"));
+        for (const element of timeElements) {
+            const childNodes = Array.prototype.slice.call(element.childNodes);
+            const timeChildNodes = childNodes.filter(x => x.localName === "time");
+            if (timeChildNodes.length > 0) {
+                for (const node of timeChildNodes) {
+                    TranslateTime(node);
+                }
+            }
+            else {
+                TranslateTime(element);
+            }
+        }
+    }
+
+    function TranslateTime(element) {
+        let afternoon = false;
+        let timeString = element.innerHTML;
+        if (timeString.includes("PM")) {
+            afternoon = true;
+        }
+        timeString = timeString.substring(0, timeString.length - 3);
+
+        if (afternoon) {
+            timeParts = timeString.split(":");
+            timeParts[0] = parseInt(timeParts[0]) + 12;
+            timeString = `${timeParts[0]}:${timeParts[1]}`;
+        }
+
+        element.innerHTML = timeString;
+    }
+
+    function GetMothName(monthInteger) {
+        switch (monthInteger) {
+            case 0:
+                return "JAN";
+                break;
+            case 1:
+                return "FEB";
+                break;
+            case 2:
+                return "MAR";
+                break;
+            case 3:
+                return "APR";
+                break;
+            case 4:
+                return "MAI";
+                break;
+            case 5:
+                return "JUN";
+                break;
+            case 6:
+                return "JUL";
+                break;
+            case 7:
+                return "AUG";
+                break;
+            case 8:
+                return "SEP";
+                break;
+            case 9:
+                return "OKT";
+                break;
+            case 10:
+                return "NOV";
+                break;
+            case 11:
+                return "DES";
+                break;
+            default:
+                return "";
+                break;
+        }
+    }
+</script>
