@@ -1,0 +1,66 @@
+<script>
+    window.onload = function () {
+        const className = "flyoutitem-datetime--12hr";
+        let counter = 0;
+        let i = setInterval(function () {
+            if (document.getElementsByClassName("flyoutitem-datetime--12hr").length) {
+                clearInterval(i);
+                changeDates();
+            }
+            if (counter > 50) {
+                clearInterval(i);
+            }
+            counter++
+        }, 100);
+    }
+
+    function changeDates() {
+        const courseTimes = Array.prototype.slice.call(document.getElementsByClassName("flyoutitem-datetime--12hr"));
+        for (const element of courseTimes) {
+            const originalInterval = element.innerText;
+            if (originalInterval.match(/^\d/)) {
+                const times = originalInterval.split("–").map(x => x.trim());
+                let newTimes = [];
+                for (let time of times) {
+                    const newTime = getIsoTime(time);
+                    newTimes.push(newTime);
+                }
+                element.innerText = `${newTimes[0]} – ${newTimes[1]}`;
+            }
+            else {
+                const dateTimes = originalInterval.split("–").map(x => x.trim());
+                const newDateTimes = [];
+                for (const dateTime of dateTimes) {
+                    const dateTimeElements = dateTime.split(",").map(x => x.trim());
+                    const dateElements = dateTimeElements[1].split(" ").map(x => x.trim());
+                    const day = dateElements[1];
+                    const month = getMonthString(dateElements[0]);
+                    const time = getIsoTime(dateTimeElements[2]);
+                    const newDateTime = `${day}. ${month} ${time}`;
+                    newDateTimes.push(newDateTime);
+                }
+                element.innerText = `${newDateTimes[0]} – ${newDateTimes[1]}`;
+            }
+        }
+    }
+
+    function getMonthString(month) {
+        const monthString = month.toUpperCase();
+        if (monthString === "MAY") {
+            return "MAI";
+        }
+        if (monthString === "OCT") {
+            return "OCT";
+        }
+        return monthString;
+    }
+
+    function getIsoTime(time) {
+        if (time.includes("pm")) {
+            timeParts = time.split(":");
+            timeParts[0] = parseInt(timeParts[0]) + 12;
+            time = `${timeParts[0]}:${timeParts[1]}`;
+        }
+        return time.substring(0, time.length - 2);
+    }
+</script>
