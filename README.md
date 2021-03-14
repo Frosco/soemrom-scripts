@@ -1,4 +1,4 @@
-# Sømrom scripts
+# Squarespace scripts
 
 These are some custom scripts for the webpage of Sømrom, a shop offering sewing courses and custom clothing in Oslo (https://www.soemrom.com).
 
