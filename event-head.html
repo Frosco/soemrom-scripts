@@ -1,8 +1,10 @@
 <script>
     window.onload = function () {
-        const backlink = document.getElementsByClassName("eventitem-backlink")[0];
-        if (backlink.innerHTML.includes("Back to All Events")) {
-            backlink.innerHTML = "Tilbake til alle aktiviteter"
+        const backlinks = document.getElementsByClassName("eventitem-backlink");
+        for (const backlink of backlinks) {
+            if (backlink.innerHTML.includes("Back to All Events")) {
+                backlink.innerHTML = "Tilbake til alle aktiviteter"
+            }
         }
 
         const dateElements = Array.prototype.slice.call(document.getElementsByClassName("event-date"));
@@ -26,6 +28,22 @@
             }
             else {
                 TranslateTime(element);
+            }
+        }
+
+        var datetags = document.getElementsByClassName("eventlist-datetag-startdate--day");
+        for (const datetag of datetags) {
+            var parent = datetag.parentNode;
+            parent.insertBefore(datetag, parent.firstChild);
+        }
+
+        const toElements = document.getElementsByClassName("eventlist-datetag-enddate");
+        for (const element of toElements) {
+            if (element.innerHTML.startsWith("to")) {
+                const textParts = element.innerText.split(" ");
+                const day = textParts[2];
+                const month = getMonthString(textParts[1]);
+                element.innerText = `TIL ${day}. ${month}`;
             }
         }
     }
@@ -89,5 +107,15 @@
                 return "";
                 break;
         }
+    }
+
+    function getMonthString(month) {
+        if (month === "MAY") {
+            return "MAI";
+        }
+        if (month === "OCT") {
+            return "OKT";
+        }
+        return month;
     }
 </script>
